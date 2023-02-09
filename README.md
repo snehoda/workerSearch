@@ -1,11 +1,9 @@
 # workerSearch
-
-
 import {baseEnvData} from "../../config/_base";
 import {urlEndpoints, workersItems, workersHeaders, itemNames, wrk1Worker} from "../../helper/names";
 import {mainPage, workersFlow1} from "../../helper/selectors";
 import {verifyTextOfEl} from "../../helper/asserts";
-import {clearAndTypeText, clickOnEl, TypeText, clickOnElByText, inputText} from "../../helper/methods";
+import {clearAndTypeText, clickOnEl, clickOnElByText, inputText, JustTypeText} from "../../helper/methods";
 describe('Search worker', () => {
 
     beforeEach('Login', () => {
@@ -15,7 +13,7 @@ describe('Search worker', () => {
 
     it('Search for existing worker', () => {
         clickOnEl(workersFlow1.searchField)
-        TypeText(workersFlow1.searchField, workersItems.wkr)
+        JustTypeText(workersFlow1.searchField, workersItems.wkr)
         verifyTextOfEl(workersFlow1.workerWholeField, workersItems.wkr)
         clickOnEl(workersFlow1.cleanWindowButton)
         clickOnEl(workersFlow1.searchField)
@@ -32,10 +30,21 @@ describe('Search worker', () => {
     });
 
 
-    it.only('Verify texts on the page', () => {
+    it.skip('Verify texts on the page', () => {
         cy.get(workersFlow1.workerWholeField).should('be.visible');
         wrk1Worker.forEach((el) =>
             cy.get(workersFlow1.workerWholeField).should('contain', `${el}`)
         );
     });
 })
+
+methods:
+
+export const JustTypeText = (selector, text) => {
+    cy.get(selector).should('be.visible').type(text);
+}
+
+names:
+
+export const wrk1Worker = ['WKR-1', 'Serhiy Nehoda', 'Team Lead', '+1 (235) 345-4354', baseEnvData.businessOwner.email, '5435 Northwest 10th Court, Plantation, FL']
+
